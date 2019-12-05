@@ -39,7 +39,6 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-
 import javax.json.Json;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
@@ -453,9 +452,12 @@ public class ApisJarMojo extends AbstractIncludingFeatureMojo implements Artifac
 
         for (org.apache.maven.artifact.Artifact resolvedArtifact : result.getArtifacts()) {
 
-                System.out.println("{ARTIFACT}: "+resolvedArtifact.getArtifactId());
-                System.out.println("{ARTIFACT FILE}: "+resolvedArtifact.getFile());
+            if (resolvedArtifact.getFile() != null) {
+                getLog().debug("Adding to javadoc classpath " + resolvedArtifact);
                 javadocClasspath.add(resolvedArtifact.getFile().getAbsolutePath());
+            } else {
+                getLog().debug("Ignoring for javadoc classpath " + resolvedArtifact);
+            }
 
         }
     }
